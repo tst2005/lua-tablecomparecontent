@@ -13,10 +13,12 @@ local dispatchtype = {}
 function lowlevelcmptable(t1, t2, cache)
 	cache = cache or {}
 	for k,v in pairs(t1) do
-		if type(v) ~= type(t2[k]) then return false end -- if type are not the same
-		local cmp = dispatchtype[type(v)] or cmpdirect
-		if not cmp(v, t2[k]) then return false end
-		cache[k]=true
+		if not cache[k] then
+			if type(v) ~= type(t2[k]) then return false end -- if type are not the same
+			local cmp = dispatchtype[type(v)] or cmpdirect
+			if not cmp(v, t2[k]) then return false end
+			cache[k]=true
+		end
 	end
 	return true
 end
